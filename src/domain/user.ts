@@ -51,14 +51,21 @@ export type SkillRow = {
 
 export type CardUser = UserRow & {
   skills: SkillRow[];
-  githubUrl: string;
-  qiitaUrl: string;
-  xUrl: string;
+  githubUrl: string | null;
+  qiitaUrl: string | null;
+  xUrl: string | null;
 };
 
-const toGithubUrl = (id: string) => "https://github.com/" + id;
-const toQiitaUrl = (id: string) => "https://qiita.com/" + id;
-const toXUrl = (id: string) => "https://twitter.com/" + id;
+export type SocialLink = {
+  label: "GitHub" | "Qiita" | "X";
+  url: string;
+};
+
+const hasValue = (value:string) => value.trim().length > 0;
+
+const toGithubUrl = (id: string) => hasValue(id) ? `https://github.com/${id.trim()}` : null;
+const toQiitaUrl = (id: string) => hasValue(id) ? `https://qiita.com/${id.trim()}` : null;
+const toXUrl = (id: string) => hasValue(id) ? `https://twitter.com/${id.trim()}` : null;
 
 export const createCardUser = (
   user: UserRow,
@@ -70,3 +77,18 @@ export const createCardUser = (
   qiitaUrl: toQiitaUrl(user.qiita_id),
   xUrl: toXUrl(user.x_id),
 });
+
+export const getSocialLinks = (user: CardUser): SocialLink[] => {
+  const links: SocialLink[] = [];
+
+  if (user.githubUrl) {
+    links.push({ label: "GitHub", url: user.githubUrl });
+  }
+  if (user.qiitaUrl) {
+    links.push({ label: "Qiita", url: user.qiitaUrl });
+  }
+  if (user.xUrl) {
+    links.push({ label: "X", url: user.xUrl });
+  }
+  return links;
+};
