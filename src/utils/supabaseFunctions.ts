@@ -67,3 +67,16 @@ export const getUserWithSkills = async (
   const skills = await getSkillsByIds(skillIds);
   return createCardUser(user, skills);
 };
+
+// skills テーブルの全権を取得する(登録フォームの選択肢に使用)
+export const getAllSkills = async (): Promise<SkillRow[]> => {
+  const { data, error } = await supabase
+    .from("skills")
+    .select("*")
+    .order("id", { ascending: true });
+  if (error) {
+    console.error("Error fetching all skills:", error);
+    return [];
+  }
+  return data as SkillRow[];
+};

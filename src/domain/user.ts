@@ -61,11 +61,14 @@ export type SocialLink = {
   url: string;
 };
 
-const hasValue = (value:string) => value.trim().length > 0;
+const hasValue = (value: string) => value.trim().length > 0;
 
-const toGithubUrl = (id: string) => hasValue(id) ? `https://github.com/${id.trim()}` : null;
-const toQiitaUrl = (id: string) => hasValue(id) ? `https://qiita.com/${id.trim()}` : null;
-const toXUrl = (id: string) => hasValue(id) ? `https://twitter.com/${id.trim()}` : null;
+const toGithubUrl = (id: string) =>
+  hasValue(id) ? `https://github.com/${id.trim()}` : null;
+const toQiitaUrl = (id: string) =>
+  hasValue(id) ? `https://qiita.com/${id.trim()}` : null;
+const toXUrl = (id: string) =>
+  hasValue(id) ? `https://twitter.com/${id.trim()}` : null;
 
 export const createCardUser = (
   user: UserRow,

@@ -9,7 +9,9 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-
+import { getAllSkills } from "@/utils/supabaseFunctions";
+import { useEffect, useState } from "react";
+import type { SkillRow } from "@/domain/user";
 type RegisterCardForm = {
   favoriteWord: string;
   name: string;
@@ -20,7 +22,6 @@ type RegisterCardForm = {
   xId: string;
 };
 
-const skillOptions = ["React", "Vue", "Angular", "Node.js", "Django"];
 export const RegisterCardPage = () => {
   const {
     handleSubmit,
@@ -29,7 +30,14 @@ export const RegisterCardPage = () => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm<RegisterCardForm>();
-
+  const [skills, setSkills] = useState<SkillRow[]>([]);
+  useEffect(() => {
+    const loadSkills = async () => {
+      const list = await getAllSkills();
+      setSkills(list);
+    };
+    loadSkills();
+  }, []);
   const descriptionValue = watch("description");
   const descriptionLength = descriptionValue?.length ?? 0;
   const onSubmit = async (values: RegisterCardForm) => {
@@ -139,9 +147,9 @@ export const RegisterCardPage = () => {
                 })}
               >
                 <option value="">Select option</option>
-                {skillOptions.map((skill) => (
-                  <option key={skill} value={skill}>
-                    {skill}
+                {skills.map((skill) => (
+                  <option key={skill.id} value={skill.id}>
+                    {skill.name}
                   </option>
                 ))}
               </Box>
