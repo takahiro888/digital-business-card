@@ -23,7 +23,7 @@ const iconByLabel = {
   X: SiX,
 };
 
-export function CardPage() {
+export const CardPage = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<CardUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -150,4 +150,4 @@ export function CardPage() {
       </Container>
     </Box>
   );
-}
+};
