@@ -4,6 +4,7 @@ import {
   type UserSkillRow,
   type SkillRow,
   createCardUser,
+  type UserInsert,
 } from "../domain/user";
 import { supabase } from "./supabaseClient";
 
@@ -79,4 +80,60 @@ export const getAllSkills = async (): Promise<SkillRow[]> => {
     return [];
   }
   return data as SkillRow[];
+};
+
+// 空文字をnullに変換するヘルパー（SNS IDの未入力対応）
+const toNullableString = (value: string): string | null => {
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
+};
+
+// usersテーブルにユーザーを登録する
+// ID重複時はErrorをthrowする
+export const createUser = async (params: {
+  id: string;
+  name: string;
+  description: string;
+  githubId?: string;
+  qiitaId?: string;
+  xId?: string;
+}): Promise<UserRow> => {
+  const payload: UserInsert = {
+    id: params.id.trim(),
+    name: params.name.trim(),
+    description: params.description.trim(),
+    github_id: toNullableString(params.githubId ?? ""),
+    qiita_id: toNullableString(params.qiitaId ?? ""),
+    x_id: toNullableString(params.xId ?? ""),
+  };
+
+  const { data, error } = await supabase
+    .from("users")
+    .insert(payload)
+    .select("*")
+    .single();
+
+  if (error?.code === "23505") {
+    const duplicateError = new Error(
+      "ユーザーIDが既に存在しています。別のIDを選択してください。",
+    );
+    duplicateError.name = "ID_DUPLICATE";
+    throw duplicateError;
+  }
+  if (error) {
+    throw error;
+  }
+
+  return data as UserRow;
+};
+
+// 選んだ技術wをUserSkillテーブルに登録する
+export const linkUserSkills = async (
+  userId: string,
+  skillId: number,
+): Promise<void> => {
+  const { error } = await supabase
+    .from("user_skill")
+    .insert({ user_id: userId, skill_id: skillId });
+  if (error) throw error;
 };

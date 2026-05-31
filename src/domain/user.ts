@@ -43,6 +43,15 @@ export type UserSkillRow = {
   created_at: string;
 };
 
+export type UserInsert = {
+  id: string;
+  name: string;
+  description: string;
+  github_id: string | null;
+  qiita_id: string | null;
+  x_id: string | null;
+};
+
 export type SkillRow = {
   id: number;
   name: string;

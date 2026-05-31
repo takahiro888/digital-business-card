@@ -9,9 +9,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { getAllSkills } from "@/utils/supabaseFunctions";
+import {
+  createUser,
+  getAllSkills,
+  linkUserSkills,
+} from "@/utils/supabaseFunctions";
 import { useEffect, useState } from "react";
 import type { SkillRow } from "@/domain/user";
+import { useNavigate } from "react-router-dom";
 type RegisterCardForm = {
   favoriteWord: string;
   name: string;
@@ -23,14 +28,19 @@ type RegisterCardForm = {
 };
 
 export const RegisterCardPage = () => {
+  const navigate = useNavigate();
+  const [skills, setSkills] = useState<SkillRow[]>([]);
+  const [pageError, setPageError] = useState<string | null>(null);
+
   const {
     handleSubmit,
     reset,
     register,
     watch,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<RegisterCardForm>();
-  const [skills, setSkills] = useState<SkillRow[]>([]);
+
   useEffect(() => {
     const loadSkills = async () => {
       const list = await getAllSkills();
@@ -41,8 +51,38 @@ export const RegisterCardPage = () => {
   const descriptionValue = watch("description");
   const descriptionLength = descriptionValue?.length ?? 0;
   const onSubmit = async (values: RegisterCardForm) => {
-    console.log(values);
-    reset();
+    setPageError(null);
+    try {
+      // 1.ユーザーテーブルに登録
+      const user = await createUser({
+        id: values.favoriteWord,
+        name: values.name,
+        description: values.description,
+        githubId: values.githubId,
+        qiitaId: values.qiitaId,
+        xId: values.xId,
+      });
+
+      // 2.選んだ技術をuser_skillに保存
+      await linkUserSkills(user.id, Number(values.favoriteSkill));
+
+      reset();
+
+      // 3.登録完了後にトップページへ遷移
+      navigate("/");
+    } catch (error) {
+      if (error instanceof Error && error.name === "ID_DUPLICATE") {
+        setError("favoriteWord", {
+          type: "manual",
+          message:
+            "このIDは既に使用されています。別の英単語を入力してください。",
+        });
+        return;
+      }
+      setPageError(
+        "登録中にエラーが発生しました。時間をおいて再度お試しください。",
+      );
+    }
   };
 
   return (
@@ -185,6 +225,11 @@ export const RegisterCardPage = () => {
               * は必須項目です
             </Text>
 
+            {pageError && (
+              <Text fontSize="sm" color="red.500">
+                {pageError}
+              </Text>
+            )}
             <Button
               type="submit"
               colorPalette="blue"
