@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import type { CardUser } from "@/domain/user";
 import { getSocialLinks } from "@/domain/user";
@@ -13,6 +13,7 @@ import {
   HStack,
   Tag,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import { FaGithubSquare } from "react-icons/fa";
 import { SiQiita, SiX } from "react-icons/si";
@@ -25,6 +26,7 @@ const iconByLabel = {
 
 export const CardPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [user, setUser] = useState<CardUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -147,6 +149,15 @@ export const CardPage = () => {
             </Stack>
           )}
         </Box>
+        <Button
+          mt="6"
+          type="submit"
+          colorPalette="teal"
+          w="100%"
+          onClick={() => navigate("/")}
+        >
+          ホームへ戻る
+        </Button>
       </Container>
     </Box>
   );
