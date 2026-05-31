@@ -66,7 +66,7 @@ export const RegisterCardPage = () => {
           >
             <Box>
               <Text fontWeight="bold" mb="1">
-                好きな英単語
+                好きな英単語 *（IDになります）
               </Text>
               <Input
                 placeholder="好きな英単語を入力してください"
@@ -87,7 +87,7 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                お名前
+                お名前 *
               </Text>
               <Input
                 placeholder="山田太郎"
@@ -108,7 +108,7 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                自己紹介
+                自己紹介 *
               </Text>
               <Textarea
                 placeholder="自己紹介を入力"
@@ -132,7 +132,7 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                好きな技術
+                好きな技術 *
               </Text>
               <Box
                 as="select"
