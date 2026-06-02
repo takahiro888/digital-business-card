@@ -156,7 +156,7 @@ export const CardPage = () => {
           w="100%"
           onClick={() => navigate("/")}
         >
-          ホームへ戻る
+          ホームへ戻るtest
         </Button>
       </Container>
     </Box>
