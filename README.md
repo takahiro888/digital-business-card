@@ -1,73 +1,101 @@
-# React + TypeScript + Vite
+# デジタル名刺アプリ
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+IDを使って自分の名刺を作成・共有できるWebアプリです。
 
-Currently, two official plugins are available:
+## 機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **トップページ**: IDを入力して他のユーザーの名刺を閲覧
+- **名刺ページ**: 名前・自己紹介・好きな技術・SNSリンクを表示
+- **新規登録**: 好きな英単語をIDにして名刺を登録
 
-## React Compiler
+## 技術スタック
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| カテゴリ       | 技術                         |
+| -------------- | ---------------------------- |
+| フロントエンド | React 19 + TypeScript + Vite |
+| UI             | Chakra UI                    |
+| ルーティング   | React Router                 |
+| フォーム       | React Hook Form              |
+| BaaS           | Supabase                     |
+| ホスティング   | Firebase                     |
 
-## Expanding the ESLint configuration
+## 画面構成
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+| パス              | 画面     | 説明                   |
+| ----------------- | -------- | ---------------------- |
+| `/`               | トップ   | IDを入力して名刺を検索 |
+| `/cards/:id`      | 名刺表示 | 指定IDの名刺を表示     |
+| `/cards/register` | 新規登録 | 名刺を新規作成         |
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## セットアップ
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. リポジトリをクローン
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+git clone https://github.com/your-username/digital-business-card.git
+cd digital-business-card
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. 依存パッケージをインストール
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 3. 環境変数を設定
+
+`.env_template` をコピーして `.env` を作成し、Supabaseの接続情報を入力します。
+
+```bash
+cp .env_template .env
+```
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### 4. Supabaseのテーブル構成
+
+以下のテーブルをSupabaseで作成してください。
+
+**users**
+| カラム | 型 | 備考 |
+|---|---|---|
+| id | text | PRIMARY KEY（ユーザーが入力した英単語） |
+| name | text | |
+| description | text | |
+| github_id | text | nullable |
+| qiita_id | text | nullable |
+| x_id | text | nullable |
+| created_at | timestamptz | DEFAULT now() |
+
+**skills**
+| カラム | 型 | 備考 |
+|---|---|---|
+| id | int8 | PRIMARY KEY |
+| name | text | |
+| created_at | timestamptz | DEFAULT now() |
+
+**user_skill**
+| カラム | 型 | 備考 |
+|---|---|---|
+| id | int8 | PRIMARY KEY |
+| user_id | text | REFERENCES users(id) |
+| skill_id | int8 | REFERENCES skills(id) |
+| created_at | timestamptz | DEFAULT now() |
+
+### 5. 開発サーバーを起動
+
+```bash
+npm run dev
+```
+
+## コマンド
+
+```bash
+npm run dev        # 開発サーバー起動
+npm run build      # プロダクションビルド
+npm run lint       # ESLintチェック
+npm run test       # テスト実行
 ```
