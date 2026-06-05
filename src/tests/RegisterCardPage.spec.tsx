@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // react-router-domのモック
@@ -56,5 +56,46 @@ describe("RegisterCardPage", () => {
     ).toBeInTheDocument();
   });
 
-  
+  it("全項目入力して登録ボタンを押すと/に遷移する", async () => {
+    renderRegisterCardPage();
+
+    // getAllSkillsが非同期なので選択肢の描画を持つ
+    await waitFor(() => {
+      expect(
+        screen.getByRole("option", { name: "TypeScript" }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.change(
+      screen.getByPlaceholderText("好きな英単語を入力してください"),
+      {
+        target: { value: "test" },
+      },
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("山田太郎"), {
+      target: { value: "テスト太郎" },
+    });
+
+    // descritionはminLength:10があるので10文字以上
+    fireEvent.change(screen.getByPlaceholderText("自己紹介を入力"), {
+      target: { value: "テスト用の自己紹介文です" },
+    });
+
+    fireEvent.change(screen.getByRole("combobox"), {
+      target: { value: "1" },
+    });
+
+    // @は不要 プレースホルダーが３つあるので、getAllByPlaceholderText で配列取得
+    const optionalInputs = screen.getAllByPlaceholderText("@は不要");
+    fireEvent.change(optionalInputs[0], { target: { value: "github-user" } });
+    fireEvent.change(optionalInputs[1], { target: { value: "qiita-user" } });
+    fireEvent.change(optionalInputs[2], { target: { value: "x-user" } });
+
+    fireEvent.click(screen.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/");
+    });
+  });
 });
