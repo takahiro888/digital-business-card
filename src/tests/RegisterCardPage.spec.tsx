@@ -12,7 +12,7 @@ vi.mock("react-router-dom", () => ({
 vi.mock("@/utils/supabaseFunctions", () => ({
   getAllSkills: vi.fn(),
   createUser: vi.fn(),
-  linkUserSkill: vi.fn(),
+  linkUserSkills: vi.fn(),
 }));
 
 // モック宣言後にimport
