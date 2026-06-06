@@ -1,0 +1,29 @@
+name: Daily batch - delete previous day data
+
+on:
+  schedule:
+    - cron: "0 21 * * *" # 毎日JST 06:00 = UTC 21:00
+  workflow_dispatch: # 手動トリガーも可能にする
+
+jobs:
+  batch:
+    name: Delete previous day data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/checkout@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run batch
+        run: npx ts-node --esm ./batch/index.ts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL}}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
