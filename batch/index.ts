@@ -29,7 +29,7 @@ const deletePreviousDayData = async () => {
   console.log(`Deleting data from ${start} to ${end}`);
 
   const { data: users, error: fetchError } = await supabase
-    .from("cards")
+    .from("users")
     .select("id")
     .gte("created_at", start)
     .lte("created_at", end);
