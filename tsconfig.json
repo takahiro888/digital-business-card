@@ -3,12 +3,14 @@
     "esm": true, //  「古い仕様じゃなくて、最新のESM（import/export）として実行してね！」という指示
     "compilerOptions": {
       "module": "NodeNext", //  「最新のNode.jsのルールに準拠して翻訳してね！」
-      "moduleResolution": "NodeNext" //  「最新のNode.jsのルールでファイルの場所を探してね！」
+      "moduleResolution": "NodeNext", //  「最新のNode.jsのルールでファイルの場所を探してね！」
+      "types": ["node"]
     }
   },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.batch.json" }
   ]
 }
