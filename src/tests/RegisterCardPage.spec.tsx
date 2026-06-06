@@ -98,4 +98,69 @@ describe("RegisterCardPage", () => {
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
   });
+
+  it("IDがないときにエラーメッセージが出る", async () => {
+    renderRegisterCardPage();
+
+    fireEvent.click(screen.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("好きな英単語は必須です")).toBeInTheDocument();
+    });
+  });
+
+  it("名前がないときにエラーメッセージが出る", async () => {
+    renderRegisterCardPage();
+
+    fireEvent.click(screen.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("お名前は必須です")).toBeInTheDocument();
+    });
+  });
+
+  it("紹介文がないときにエラーメッセージが出る", async () => {
+    renderRegisterCardPage();
+
+    fireEvent.click(screen.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(screen.getByText("自己紹介は必須です")).toBeInTheDocument();
+    });
+  });
+
+  it("オプション(GitHub, Qiita, X)は空でも登録できる", async () => {
+    renderRegisterCardPage();
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("option", { name: "TypeScript" }),
+      ).toBeInTheDocument();
+    });
+
+    fireEvent.change(
+      screen.getByPlaceholderText("好きな英単語を入力してください"),
+      {
+        target: { value: "test" },
+      },
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("山田太郎"), {
+      target: { value: "テスト太郎" },
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("自己紹介を入力"), {
+      target: { value: "テスト用の自己紹介文です" },
+    });
+
+    fireEvent.change(screen.getByRole("combobox"), {
+      target: { value: "1" },
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "登録" }));
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/");
+    });
+  });
 });
