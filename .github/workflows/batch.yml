@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Run batch
-        run: npx ts-node --esm ./batch/index.ts
+        run: npx tsx ./batch/index.ts
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL}}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
