@@ -11,28 +11,20 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const getPreviousDayRange = () => {
+const getTodayStart = () => {
   const now = new Date();
-  const start = new Date(now);
-  start.setUTCDate(now.getUTCDate() - 1);
-  start.setUTCHours(0, 0, 0, 0);
-
-  const end = new Date(now);
-  end.setUTCDate(now.getUTCDate() - 1);
-  end.setUTCHours(23, 59, 59, 999);
-
-  return { start: start.toISOString(), end: end.toISOString() };
+  now.setUTCHours(0, 0, 0, 0);
+  return now.toISOString();
 };
 
 const deletePreviousDayData = async () => {
-  const { start, end } = getPreviousDayRange();
-  console.log(`Deleting data from ${start} to ${end}`);
+  const todayStart = getTodayStart();
+  console.log(`Deleting data before ${todayStart}`);
 
   const { data: users, error: fetchError } = await supabase
     .from("users")
     .select("id")
-    .gte("created_at", start)
-    .lte("created_at", end);
+    .lt("created_at", todayStart); // 今日の0時より前に作成されたユーザーを取得
 
   if (fetchError) {
     console.error("Failed to fetch users:", fetchError);
