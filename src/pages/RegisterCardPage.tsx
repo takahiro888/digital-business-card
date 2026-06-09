@@ -106,7 +106,11 @@ export const RegisterCardPage = () => {
           >
             <Box>
               <Text fontWeight="bold" mb="1">
-                好きな英単語 *（IDになります）
+                好きな英単語{" "}
+                <Text as="span" color="red.600">
+                  *
+                </Text>
+                （IDになります）
               </Text>
               <Input
                 placeholder="好きな英単語を入力してください"
@@ -127,7 +131,10 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                お名前 *
+                お名前{" "}
+                <Text as="span" color="red.600">
+                  *
+                </Text>
               </Text>
               <Input
                 placeholder="山田太郎"
@@ -148,7 +155,10 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                自己紹介 *
+                自己紹介{" "}
+                <Text as="span" color="red.600">
+                  *
+                </Text>
               </Text>
               <Textarea
                 placeholder="自己紹介を入力"
@@ -172,7 +182,10 @@ export const RegisterCardPage = () => {
 
             <Box>
               <Text fontWeight="bold" mb="1">
-                好きな技術 *
+                好きな技術{" "}
+                <Text as="span" color="red.600">
+                  *
+                </Text>
               </Text>
               <Box
                 as="select"
@@ -222,7 +235,10 @@ export const RegisterCardPage = () => {
             </Box>
 
             <Text fontSize="sm" color="gray.600">
-              * は必須項目です
+              <Text as="span" color="red.600">
+                *
+              </Text>{" "}
+              は必須項目です
             </Text>
 
             {pageError && (
