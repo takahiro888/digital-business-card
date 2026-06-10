@@ -70,7 +70,7 @@ export type SocialLink = {
   url: string;
 };
 
-const hasValue = (value: string) => value.trim().length > 0;
+const hasValue = (value: string | null | undefined) => value?.trim().length > 0;
 
 const toGithubUrl = (id: string) =>
   hasValue(id) ? `https://github.com/${id.trim()}` : null;
