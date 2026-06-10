@@ -84,6 +84,9 @@ export const getAllSkills = async (): Promise<SkillRow[]> => {
 
 // 空文字をnullに変換するヘルパー（SNS IDの未入力対応）
 const toNullableString = (value: string): string | null => {
+  if (!value) {
+    return null;
+  }
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
 };
