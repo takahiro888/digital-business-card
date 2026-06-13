@@ -110,11 +110,17 @@ export const createUser = async (params: {
     x_id: toNullableString(params.xId),
   };
 
-  const { error } = await supabase.from("users").insert(payload);
+  const { data, error } = await supabase
+    .from("users")
+    .insert(payload)
+    .select()
+    .single();
 
   if (error) {
     throw new Error(error.message);
   }
+
+  return data;
 };
 
 // 選んだ技術wをUserSkillテーブルに登録する
