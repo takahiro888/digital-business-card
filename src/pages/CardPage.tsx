@@ -84,7 +84,7 @@ export const CardPage = () => {
         >
           <Stack gap={{ base: 5, md: 6 }}>
             <Stack gap="1">
-              <Heading size={{ base: "lg", md: "xl" }}>{user?.name}</Heading>
+              <Heading size={{ base: "2xl", md: "3xl" }}>{user?.name}</Heading>
               <Text fontSize="xs" color="gray.500">
                 ID:{user?.id}
               </Text>
