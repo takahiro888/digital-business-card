@@ -55,7 +55,7 @@ export const getSkillsByIds = async (
   return data as SkillRow[];
 };
 
-// ユーザIDからユーザ情報とスキル情報をまとめて取得する関数
+// ユーザIDからユーザ情報とスキル情報をまとめて取得する
 export const getUserWithSkills = async (
   userId: string,
 ): Promise<CardUser | null> => {
