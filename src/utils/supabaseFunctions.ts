@@ -37,7 +37,7 @@ export const getUserSkillLinks = async (
   return data as UserSkillRow[];
 };
 
-// スキルIDの配列からスキル情報を取得する関数
+// スキルIDの配列からスキル情報を取得する
 export const getSkillsByIds = async (
   skillIds: number[],
 ): Promise<SkillRow[]> => {
