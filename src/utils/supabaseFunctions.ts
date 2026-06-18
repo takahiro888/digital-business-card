@@ -8,7 +8,7 @@ import {
 } from "../domain/user";
 import { supabase } from "./supabaseClient";
 
-// ユーザIDからユーザ情報を取得する関数
+// ユーザIDからユーザ情報を取得する
 export const getUserById = async (userId: string): Promise<UserRow | null> => {
   const { data, error } = await supabase
     .from("users")
